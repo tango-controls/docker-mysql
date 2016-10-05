@@ -1,5 +1,5 @@
 # docker-mysql
-Docker image with MySQL and TANGO DB
+Docker image with MySQL and TANGO DB Scheme
 
 `docker build -t tango-db .`
 

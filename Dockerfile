@@ -1,4 +1,4 @@
-FROM mysql:5.7
+FROM mysql:5.5
 
 MAINTAINER TANGO Controls Team <tango@esrf.fr>
 

@@ -7,6 +7,6 @@ ENV MYSQL_USER=tango
 ENV MYSQL_PASSWORD=tango
 
 ADD dbinit/create_db.sql \
-    dbinit/include/create_db_tables.sql \
-    dbinit/include/stored_proc.sql \
+    dbinit/create_db_tables.sql \
+    dbinit/stored_proc.sql \
     /docker-entrypoint-initdb.d/

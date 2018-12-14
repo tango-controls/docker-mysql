@@ -22,5 +22,5 @@ before_script:
   - sed -i "/CREATE DATABASE tango_db;/d" dbinit/create_db.sql
 
 script:
-  - docker -t tangocs/mysql build .
+  - docker build -t tangocs/mysql .
   

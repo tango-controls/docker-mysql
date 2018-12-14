@@ -8,12 +8,11 @@ services:
 
 before_script:
   - source tango.properties
-  - wget https://github.com/tango-controls/TangoSourceDistribution/releases/download/${TANGO_SOURCE_DISTRIBUTION_VER}/tango-${TANGO_SOURCE_DISTRIBUTION_VER}.tar.gz
-  - tar xf tango-${TANGO_SOURCE_DISTRIBUTION_VER}.tar.gz
+  - git clone -b ${TANGO_DB_VER} https://github.com/tango-controls/TangoDatabase.git database
   - mkdir -p dbinit/include
-  - cp tango-${TANGO_LIB_VER}/cppserver/database/create_db.sql.in dbinit/create_db.sql
-  - cp tango-${TANGO_LIB_VER}/cppserver/database/create_db_tables.sql.in dbinit/include/create_db_tables.sql
-  - cp tango-${TANGO_LIB_VER}/cppserver/database/stored_proc.sql.in dbinit/include/stored_proc.sql
+  - cp database/create_db.sql.in dbinit/create_db.sql
+  - cp database/create_db_tables.sql.in dbinit/include/create_db_tables.sql
+  - cp database/stored_proc.sql.in dbinit/include/stored_proc.sql
   - sed -i "s|@TANGO_DB_NAME@|tango_db|g" dbinit/create_db.sql
   - sed -i "s|@TANGO_DB_NAME@|tango_db|g" dbinit/include/create_db_tables.sql
   - sed -i "s|@TANGO_DB_NAME@|tango_db|g" dbinit/include/stored_proc.sql
@@ -23,4 +22,13 @@ before_script:
 
 script:
   - docker build -t tangocs/mysql .
-  
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - docker tag tangocs/mysql "tangocs/mysql:${TRAVIS_BRANCH}"
+
+deploy:
+  - provider: script
+    script: docker push "tangocs/mysql:${TRAVIS_BRANCH}"
+    on:
+      tags: true
